@@ -3,7 +3,11 @@ package com.guild;
 import com.guild.block.ModBlocks;
 import com.guild.command.GuildCommands;
 import com.guild.config.GuildConfig;
+import com.guild.config.NametagConfig;
 import com.guild.config.WarehouseConfig;
+import com.guild.network.GuildNametagState;
+import com.guild.network.GuildNametagSync;
+import com.guild.network.GuildNametagSyncPayload;
 import com.guild.storage.GuildStorage;
 import com.guild.storage.GuildWarehouseStorage;
 import com.guild.guild.ProtectionHandler;
@@ -20,6 +24,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
@@ -43,7 +48,9 @@ public final class GuildMod {
         NeoForge.EVENT_BUS.register(new UpgradeHandler());
         NeoForge.EVENT_BUS.register(new TerritoryBuffHandler());
         NeoForge.EVENT_BUS.register(new GuildTeleportHandler());
+        NeoForge.EVENT_BUS.register(new GuildNametagSync());
         NeoForge.EVENT_BUS.register(this);
+        modBus.addListener(this::registerPayloadHandlers);
     }
 
     @SubscribeEvent
@@ -52,6 +59,7 @@ public final class GuildMod {
         UpgradeConfig.init(net.neoforged.fml.loading.FMLPaths.CONFIGDIR.get());
         TerritoryLimitConfig.init(net.neoforged.fml.loading.FMLPaths.CONFIGDIR.get());
         WarehouseConfig.init(net.neoforged.fml.loading.FMLPaths.CONFIGDIR.get());
+        NametagConfig.init(net.neoforged.fml.loading.FMLPaths.CONFIGDIR.get());
         GuildStorage.init(worldRoot);
         GuildStorage.load();
         GuildWarehouseStorage.init(worldRoot, event.getServer().registryAccess());
@@ -61,5 +69,12 @@ public final class GuildMod {
     public void onServerStopping(ServerStoppingEvent event) {
         GuildStorage.save();
         GuildWarehouseStorage.save();
+    }
+
+    private void registerPayloadHandlers(RegisterPayloadHandlersEvent event) {
+        event.registrar("1").playToClient(
+                GuildNametagSyncPayload.TYPE,
+                GuildNametagSyncPayload.CODEC,
+                (payload, context) -> context.enqueueWork(() -> GuildNametagState.update(payload)));
     }
 }

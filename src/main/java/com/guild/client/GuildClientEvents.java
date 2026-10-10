@@ -1,6 +1,7 @@
 package com.guild.client;
 
 import com.guild.GuildMod;
+import com.guild.network.GuildNametagState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
@@ -10,6 +11,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 
 /**
  * 客户端背包中的公会仓库入口。
@@ -18,6 +20,11 @@ import net.neoforged.neoforge.client.event.ScreenEvent;
 public final class GuildClientEvents {
 
     private GuildClientEvents() {
+    }
+
+    @SubscribeEvent
+    public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        GuildNametagState.clear();
     }
 
     @SubscribeEvent

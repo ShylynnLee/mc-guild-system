@@ -2,6 +2,9 @@ modLoader = "javafml"
 loaderVersion = "[1,)"
 license = "MIT"
 
+[[mixins]]
+config = "guild.mixins.json"
+
 [[mods]]
 modId = "guild"
 version = "${version}"
