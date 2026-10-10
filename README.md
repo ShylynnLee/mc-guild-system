@@ -1,5 +1,7 @@
 # 🎮 公会系统 · 玩法说明
 
+> **NeoForge 1.21.1** · [⬇ 下载 Release](https://github.com/ShylynnLee/mc-guild-system/releases) · [🔧 技术文档](技术文档.md)
+
 > **一句话**：和朋友共建公会 → 圈地盖房 → 打成就升级 → 解锁 Buff 和更大领地。
 
 ---
