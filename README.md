@@ -13,6 +13,8 @@
 3. **圈地** 站终端旁 `/guild claim 领地名` → 以终端为中心的领地归你了
 4. **拉人** `/guild invite 好友ID` → 对方 `/guild accept`
 
+**聊天菜单提示**：先按 `T` 打开聊天框，点击带 `☞` 且带下划线的文字即可执行命令。
+
 ---
 
 ## 🔄 核心玩法循环
@@ -59,9 +61,10 @@
 | Lv8 | II | II | II |
 
 ### 4️⃣ 公会仓库 —— 共享物资
-- 三个仓库：**装备** `/guild equipment`、**矿物** `/guild materials`、**方块** `/guild blocks`
+- 三个仓库：**装备** `/guild storage equipment`、**矿物** `/guild storage materials`、**方块** `/guild storage blocks`
 - **容量随公会等级涨**：Lv1=9格 → Lv6+=54格（6行大箱）
-- 会长可逐个成员开关权限：`/guild warehouse 好友ID on/off`
+- 会长可逐个成员开关权限（支持离线成员）：`/guild warehouse 好友ID on/off`
+- 服务器总开关：`config/guild-warehouse.json` 的 `enabled` 字段，修改后下次打开仓库自动生效
 - 打到的稀有装备、挖到的矿，全公会共用！
 
 ### 5️⃣ 保护 —— 不怕熊孩子
@@ -98,9 +101,9 @@
 | 打开管理菜单 | `/guild menu` |
 | 建公会 | `/guild create <名>` |
 | 圈地/删地 | `/guild claim <名>` / `/guild unclaim <名>` |
-| 传送回基地 | `/guild tp <领地名>` |
+| 传送回基地 | `/guild tp <领地名>`（支持 Tab 补全本公会领地） |
 | 邀请/接受 | `/guild invite <ID>` / `/guild accept` |
-| 仓库 | `/guild equipment` / `materials` / `blocks` |
+| 仓库 | `/guild storage equipment` / `materials` / `blocks` |
 | 升级确认 | `/guild upgrade` |
 | 查看状态 | `/guild info` |
 

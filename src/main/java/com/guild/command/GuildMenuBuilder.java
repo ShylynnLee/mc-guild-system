@@ -34,7 +34,8 @@ public final class GuildMenuBuilder {
         player.sendSystemMessage(info(guild));
         player.sendSystemMessage(upgradeProgress(guild, player));
         player.sendSystemMessage(Component.empty());
-        player.sendSystemMessage(Component.literal("  操作：").withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("  可点击操作（带 ☞）：")
+                .withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
 
         // 第一行操作按钮（升级条件满足时显示升级按钮）
         MutableComponent row1 = Component.literal("  ");
@@ -80,8 +81,8 @@ public final class GuildMenuBuilder {
         player.sendSystemMessage(row4);
 
         player.sendSystemMessage(Component.literal("━━━━━━━━━━━━━━━━━━━━").withStyle(ChatFormatting.DARK_GRAY));
-        player.sendSystemMessage(Component.literal("  提示：需打开聊天框(默认T)才能点击按钮")
-                .withStyle(ChatFormatting.DARK_GRAY));
+        player.sendSystemMessage(Component.literal("  ☞ 点击带手指标记的文字；先按 T 打开聊天框")
+                .withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
     }
 
     /** 升级进度：显示下一等级所需成就及完成状态 */
@@ -180,6 +181,8 @@ public final class GuildMenuBuilder {
 
     public static void sendPermMenu(ServerPlayer player, Guild guild, com.guild.guild.Territory territory, Guild.Role role) {
         player.sendSystemMessage(Component.literal("━━━━━━━━━━━━━━━━━━━━").withStyle(ChatFormatting.DARK_GRAY));
+        player.sendSystemMessage(Component.literal("  ☞ 点击带手指标记的文字；先按 T 打开聊天框")
+                .withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
         player.sendSystemMessage(Component.literal("  权限管理 · 领地「" + territory.getName() + "」· " + role.displayName)
                 .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
@@ -252,6 +255,8 @@ public final class GuildMenuBuilder {
         player.sendSystemMessage(footer);
 
         player.sendSystemMessage(Component.literal("━━━━━━━━━━━━━━━━━━━━").withStyle(ChatFormatting.DARK_GRAY));
+        player.sendSystemMessage(Component.literal("  ☞ 点击带手指标记的文字；先按 T 打开聊天框")
+                .withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
     }
 
     // ========== 辅助 ==========
@@ -293,18 +298,22 @@ public final class GuildMenuBuilder {
 
     /** 构造一个可点击按钮（点击直接执行命令） */
     private static MutableComponent button(String text, String command, String hover, ChatFormatting color) {
-        return Component.literal(text).withStyle(style -> style
+        return Component.literal("☞ " + text).withStyle(style -> style
                 .withColor(color)
+                .withUnderlined(true)
                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command))
-                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(hover))));
+                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                        Component.literal("点击执行：" + hover))));
     }
 
     /** 构造"点击填入命令"按钮（用于需要玩家补参数的命令，如圈地名） */
     private static MutableComponent suggestButton(String text, String commandPrefix, String hover, ChatFormatting color) {
-        return Component.literal(text).withStyle(style -> style
+        return Component.literal("☞ " + text).withStyle(style -> style
                 .withColor(color)
+                .withUnderlined(true)
                 .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, commandPrefix))
-                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(hover))));
+                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                        Component.literal("点击填入命令：" + hover))));
     }
 
     private static String pad(String s, int len) {

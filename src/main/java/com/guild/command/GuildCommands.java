@@ -9,7 +9,10 @@ import com.guild.guild.InvitationManager;
 import com.guild.guild.Territory;
 import com.guild.storage.GuildWarehouse;
 import com.guild.storage.GuildWarehouseStorage;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.commands.arguments.EntityArgument;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.ChatFormatting;
@@ -23,6 +26,8 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+
+import java.util.concurrent.CompletableFuture;
 
 public class GuildCommands {
 
@@ -68,6 +73,7 @@ public class GuildCommands {
                 // 传送至领地：/guild tp <领地名>（5秒吟唱，移动/被攻击取消）
                 .then(Commands.literal("tp")
                         .then(Commands.argument("name", StringArgumentType.word())
+                                .suggests(GuildCommands::suggestTerritories)
                                 .executes(ctx -> {
                                     ServerPlayer player = ctx.getSource().getPlayer();
                                     Guild guild = GuildManager.getPlayerGuild(player);
@@ -462,6 +468,21 @@ public class GuildCommands {
                 Component.literal("公会仓库 · " + category.displayName
                         + " (" + warehouse.getSlotCount() + "格)"));
         return player.openMenu(provider).isPresent() ? 1 : 0;
+    }
+
+    private static CompletableFuture<Suggestions> suggestTerritories(
+            CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
+        ServerPlayer player = context.getSource().getPlayer();
+        Guild guild = player == null ? null : GuildManager.getPlayerGuild(player);
+        if (guild != null) {
+            String input = builder.getRemaining().toLowerCase(java.util.Locale.ROOT);
+            for (Territory territory : guild.getTerritories()) {
+                if (territory.getName().toLowerCase(java.util.Locale.ROOT).startsWith(input)) {
+                    builder.suggest(territory.getName());
+                }
+            }
+        }
+        return builder.buildFuture();
     }
 
     private static MenuType<ChestMenu> chestMenuType(int rows) {
