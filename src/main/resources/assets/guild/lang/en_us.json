@@ -1,0 +1,10 @@
+{
+  "itemGroup.guild": "Guild System",
+  "block.guild.guild_terminal": "Guild Terminal",
+  "guild.command.create": "Guild created: %s",
+  "guild.command.create.exists": "You are already in a guild",
+  "guild.command.info.no_guild": "You are not in a guild",
+  "guild.command.claim.no_terminal": "No guild terminal nearby",
+  "guild.command.claim.too_many": "Your guild has reached its territory limit",
+  "guild.command.claim.success": "Territory claimed around the terminal"
+}

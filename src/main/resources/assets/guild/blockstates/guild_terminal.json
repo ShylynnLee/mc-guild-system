@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "guild:block/guild_terminal" }
+  }
+}

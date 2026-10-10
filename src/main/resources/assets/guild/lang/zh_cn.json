@@ -1,0 +1,10 @@
+{
+  "itemGroup.guild": "公会系统",
+  "block.guild.guild_terminal": "公会终端",
+  "guild.command.create": "公会已创建：%s",
+  "guild.command.create.exists": "你已经在一个公会中",
+  "guild.command.info.no_guild": "你不在任何公会中",
+  "guild.command.claim.no_terminal": "附近没有公会终端",
+  "guild.command.claim.too_many": "你的公会领地数量已达上限",
+  "guild.command.claim.success": "已以终端为中心圈占领地"
+}
