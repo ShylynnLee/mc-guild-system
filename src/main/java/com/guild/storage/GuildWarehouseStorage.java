@@ -125,7 +125,7 @@ public final class GuildWarehouseStorage {
                     if (slot < 0 || slot >= warehouse.getContainerSize()) continue;
                     CompoundTag tag = TagParser.parseTag(item.get("nbt").getAsString());
                     ItemStack stack = ItemStack.parseOptional(registryAccess, tag);
-                    if (!stack.isEmpty()) warehouse.setItem(slot, stack);
+                    if (!stack.isEmpty()) warehouse.restoreItem(slot, stack);
                 }
             }
         } catch (Exception e) {

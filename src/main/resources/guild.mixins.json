@@ -4,7 +4,11 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
-    "client.EntityRendererMixin"
+    "client.EntityRendererMixin",
+    "client.SlotMixin"
+  ],
+  "mixins": [
+    "SlotMixin"
   ],
   "injectors": {
     "defaultRequire": 1

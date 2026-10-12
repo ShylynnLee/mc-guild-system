@@ -150,8 +150,14 @@ public final class GuildWarehouse implements Container {
     @Override
     public void setItem(int slot, ItemStack stack) {
         if (!isValidSlot(slot)) return;
+        if (!stack.isEmpty() && !category.accepts(stack)) return;
         items.set(slot, stack);
         setChanged();
+    }
+
+    void restoreItem(int slot, ItemStack stack) {
+        if (!isValidSlot(slot)) return;
+        items.set(slot, stack);
     }
 
     @Override

@@ -62,6 +62,7 @@
 
 ### 4️⃣ 公会仓库 —— 共享物资
 - 三个仓库：**装备** `/guild storage equipment`、**矿物** `/guild storage materials`、**方块** `/guild storage blocks`
+- 服务端与客户端都会过滤物品，错误分类无法存入
 - **容量随公会等级涨**：Lv1=9格 → Lv6+=54格（6行大箱）
 - 会长可逐个成员开关权限（支持离线成员）：`/guild warehouse 好友ID on/off`
 - 服务器总开关：`config/guild-warehouse.json` 的 `enabled` 字段，修改后下次打开仓库自动生效
@@ -70,7 +71,7 @@
 ### 5️⃣ 公会成员名牌 —— 隔墙找队友
 - 仅对**同公会成员**生效
 - 默认范围 **64 格**
-- 未潜行时允许名牌穿墙；潜行时恢复原版显示规则
+- 未潜行时允许名牌穿墙并使用普通不透明渲染；潜行时恢复原版显示规则
 - 服务器配置：`config/guild-nametag.json`
   - `enabled`：总开关
   - `maxDistance`：最大显示距离（默认 64，可设 8–256）

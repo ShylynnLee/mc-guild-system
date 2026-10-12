@@ -1,20 +1,46 @@
 package com.guild.mixin.client;
 
 import com.guild.network.GuildNametagState;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.client.ClientHooks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * 开启时仅让 64 格内未潜行的公会成员名牌穿墙。
  */
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin {
+
+    @Inject(method = "renderNameTag", at = @At("HEAD"))
+    private void guild$beforeNameTag(
+            Entity entity, Component displayName, PoseStack poseStack,
+            MultiBufferSource bufferSource, int packedLight, float partialTick,
+            CallbackInfo callback) {
+        if (guild$shouldEnhance(entity)) {
+            RenderSystem.disableDepthTest();
+        }
+    }
+
+    @Inject(method = "renderNameTag", at = @At("RETURN"))
+    private void guild$afterNameTag(
+            Entity entity, Component displayName, PoseStack poseStack,
+            MultiBufferSource bufferSource, int packedLight, float partialTick,
+            CallbackInfo callback) {
+        if (guild$shouldEnhance(entity)) {
+            RenderSystem.enableDepthTest();
+        }
+    }
 
     @Redirect(
             method = "renderNameTag",
@@ -45,13 +71,18 @@ public abstract class EntityRendererMixin {
         }
         if (player.isShiftKeyDown()) return original;
 
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.player == null) return true;
-        if (!GuildNametagState.shouldSeeThrough(
-                player.getUUID(), player.distanceTo(minecraft.player))) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
+    private boolean guild$shouldEnhance(Entity entity) {
+        if (!GuildNametagState.isEnabled() || !(entity instanceof AbstractClientPlayer player)) {
+            return false;
+        }
+        if (player.isShiftKeyDown()) return false;
+
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player == null) return false;
+        return GuildNametagState.shouldSeeThrough(
+                player.getUUID(), player.distanceTo(minecraft.player));
+    }
 }
